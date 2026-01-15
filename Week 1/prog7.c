@@ -7,11 +7,12 @@ int main()
 {
     char s[100];
     char ans[100];
-    scanf("%s",s);
+    fgets(s, sizeof(s), stdin);
     int l = 0;
     int r = 0;
     int i = 0;
     int len = strlen(s);
+    if(len == 0) return 0;
      while (r < len) {
         if (r < len && s[l] == s[r]) {
             r++;
@@ -21,9 +22,9 @@ int main()
             l = r;
         }
     }
-    ans[i++] = s[l];
-    i += sprintf(&ans[i], "%d", r - l);
-    l = r;
+    // ans[i++] = s[l];
+    // i += sprintf(&ans[i], "%d", r - l);
+    // l = r;
     ans[i] = '\0';
     if (strlen(ans) < strlen(s))
         printf("%s", ans);
