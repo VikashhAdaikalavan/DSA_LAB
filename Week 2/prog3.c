@@ -32,6 +32,14 @@ int main()
     }
     int k;
     scanf("%d",&k);
+    if (n == 0 || k == 0 || k%n == 0) {
+        node* temp = head;
+        while (temp != NULL) {
+            printf("%d ", temp->val);
+            temp = temp->next;
+        }
+        return 0;
+    }
     k = k%n;
     prev = NULL;
     node* p1 = head;

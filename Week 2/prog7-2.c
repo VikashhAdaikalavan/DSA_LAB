@@ -31,21 +31,37 @@ int main()
             prev = temp;
         }
     }
-    node* temp = head;
-    while (temp != NULL && temp->next != NULL)
-    {
-        if(temp->next->val<= temp->val)
-        {
-            if(temp->next != NULL) temp->next = temp->next->next;
-            else temp->next = NULL;
-        }
-        else
-        temp = temp->next;
-    }
+
+    int x;
+    scanf("%d", &x);
+    prev = NULL;
+    node* curr = head;
+    node* last = head;
+    while(last->next != NULL) last = last->next;
+    node* tail = last;
+
+    node* seqstart = NULL;
+    node* curr = head;
+    node* prev = NULL;
+    node* head2 = NULL;
     
+    while(curr != NULL)
+    {
+        if(curr->val == x)
+        {
+            if(head2 == NULL)
+            {
+                head2 = curr;
+                seqstart = head2;
+                prev = curr->next;
+                curr = curr->next;
+                prev->next = curr;
+            }
+        }
+    }
 
     //printing
-    temp = head;
+    node* temp = head;
     while(temp != NULL)
     {
         printf("%d ",temp->val);
