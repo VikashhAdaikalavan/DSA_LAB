@@ -40,26 +40,57 @@ int main()
     while(last->next != NULL) last = last->next;
     node* tail = last;
 
-    node* seqstart = NULL;
-    node* curr = head;
-    node* prev = NULL;
+    node* head1 = NULL;
     node* head2 = NULL;
-    
-    while(curr != NULL)
+    node* s1 = NULL;
+    node*s2 = NULL;
+    node* p = head;
+
+    while(p!= NULL)
     {
-        if(curr->val == x)
+        if(p->val == x)
         {
             if(head2 == NULL)
             {
-                head2 = curr;
-                seqstart = head2;
-                prev = curr->next;
-                curr = curr->next;
-                prev->next = curr;
+                s2 = p;
+                head2 = p;
+                p = p->next;
             }
+            else
+            {
+                s2->next = p;
+                s2 = p;
+                p = p->next;
+            }
+        }
+        else
+        {
+            if(head1 == NULL)
+            {
+                s1 = p;
+                head1 = p;
+                p = p->next;
+            }
+            else
+            {
+                s1->next = p;
+                s1 = p;
+                p = p->next;
+            }
+
         }
     }
 
+    if(s1) s1->next = NULL;
+    if (s2) s2->next = NULL;
+
+    if(head1 == NULL)
+        head = head2;         
+    else
+    {
+        s1->next = head2;
+        head = head1;
+    }
     //printing
     node* temp = head;
     while(temp != NULL)
