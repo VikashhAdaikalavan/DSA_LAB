@@ -34,11 +34,6 @@ int main()
 
     int x;
     scanf("%d", &x);
-    prev = NULL;
-    node* curr = head;
-    node* last = head;
-    while(last->next != NULL) last = last->next;
-    node* tail = last;
 
     node* head1 = NULL;
     node* head2 = NULL;
