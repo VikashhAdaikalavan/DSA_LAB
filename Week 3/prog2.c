@@ -1,16 +1,17 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 int main()
 {
     int n;
     scanf("%d",&n);
-
+    if(n == 0) return 0;
     int l = 1;
     int r = n;
     int arr[n+2];
-    arr[0] = -10000;
-    arr[n+1] = -10000;
+    arr[0] = INT_MIN;
+    arr[n+1] = INT_MIN;
     for(int i = 1; i<= n ; i++) scanf("%d",&arr[i]);
 
     while(l<=r)

@@ -44,6 +44,11 @@ int main()
         printf("0\n");
         return 0;
     }
+    if(d == 0) 
+    {
+        printf("Not Possible\n");
+        return 0;
+    }
     while(l<=r)
     {
         int mid = (l+r)/2;

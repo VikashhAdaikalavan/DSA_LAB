@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <math.h>
 
-int max(int a, int b)
+int maxi(int a, int b)
 {
     return a > b ? a : b;
 }
@@ -24,6 +24,15 @@ int main()
     int h;
     scanf("%d", &n);
     scanf("%d", &h);
+    if (n == 0) {
+        printf("0\n");
+        return 0;
+    }
+    if (h < n) {
+        printf("Not Possible\n");
+        return 0;
+    }   
+
     int arr[n];
     int r = INT_MIN;
     for (int i = 0; i < n; i++)

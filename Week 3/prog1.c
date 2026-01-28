@@ -21,6 +21,7 @@ int main()
 {
     int t;
     scanf("%d",&t);
+    if (t == 0) return 0;
     int arr[t][2];
 
     for(int i = 0 ; i< t ; i++)

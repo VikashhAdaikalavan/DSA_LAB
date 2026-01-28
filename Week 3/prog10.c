@@ -14,6 +14,7 @@ int mini(int a , int b)
 double median(int n1,int a[],int n2, int b[]) {
     // Ensure a is the smaller array 
     if (n1 > n2) return median(n2,b, n1,a);
+    if(n1 == 0 && n2 == 0) return 0;
 
     int low = 0, high = n1;
 
