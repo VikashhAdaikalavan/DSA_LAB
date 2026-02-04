@@ -14,7 +14,7 @@ int countLessEqual(int row[], int C, int x)
     return low; // number of elements <= x
 }
 
-int findMedian(int mat[][100], int R, int C)
+int findMedian(int R, int C,int mat[R][C])
 {
     int min = mat[0][0];
     int max = mat[0][C - 1];
@@ -29,7 +29,7 @@ int findMedian(int mat[][100], int R, int C)
 
     int required = (R * C) / 2;
 
-    while (min < max)
+    while (min <= max)
     {
         int mid = (min + max) / 2;
         int count = 0;
@@ -40,7 +40,7 @@ int findMedian(int mat[][100], int R, int C)
         if (count <= required)
             min = mid + 1;
         else
-            max = mid;
+            max = mid-1;
     }
 
     return min;
@@ -51,11 +51,11 @@ int main()
     int R, C;
     scanf("%d %d", &R, &C);
 
-    int mat[100][100];
+    int mat[R][C];
     for (int i = 0; i < R; i++)
         for (int j = 0; j < C; j++)
             scanf("%d", &mat[i][j]);
 
-    printf("%d\n", findMedian(mat, R, C));
+    printf("%d\n", findMedian(R,C,mat));
     return 0;
 }
