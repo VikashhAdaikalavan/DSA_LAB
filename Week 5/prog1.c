@@ -1,24 +1,25 @@
 #include <stdio.h>
+#include<stdlib.h>
 
 int main()
 {
-    int M, N;
-    scanf("%d", &M);
-    scanf("%d", &N);
-    int A[M + 1][N + 1];
-    int P[M + 1][N + 1];
+    int m, n;
+    scanf("%d", &m);
+    scanf("%d", &n);
+    int A[m + 1][n + 1];
+    int P[m + 1][n + 1];
 
-    for (int i = 0; i <= M; i++)
-        for (int j = 0; j <= N; j++)
+    for (int i = 0; i <= m; i++)
+        for (int j = 0; j <= n; j++)
             P[i][j] = 0;
 
-    for (int i = 1; i <= M; i++)
-        for (int j = 1; j <= N; j++)
+    for (int i = 1; i <= m; i++)
+        for (int j = 1; j <= n; j++)
             scanf("%d", &A[i][j]);
 
-    for (int i = 1; i <= M; i++)
+    for (int i = 1; i <= m; i++)
     {
-        for (int j = 1; j <= N; j++)
+        for (int j = 1; j <= n; j++)
         {
             P[i][j] = A[i][j]
                     + P[i - 1][j]
@@ -27,9 +28,9 @@ int main()
         }
     }
     printf("\n");
-    for (int i = 1; i <= M; i++)
+    for (int i = 1; i <= m; i++)
     {
-        for (int j = 1; j <= N; j++)
+        for (int j = 1; j <= n; j++)
             printf("%d ", P[i][j]);
         printf("\n");
     }
