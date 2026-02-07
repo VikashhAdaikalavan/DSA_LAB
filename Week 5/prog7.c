@@ -52,7 +52,7 @@ int main()
         scanf("%d", &arr[i]);
 
     scanf("%d",&k);
-    int targetIndex = n - k; // kth largest → (n-k)th smallest
+    int targetIndex = n - k; 
     int result = quickSelect(arr, 0, n - 1, targetIndex);
 
     printf("%d\n", result);
