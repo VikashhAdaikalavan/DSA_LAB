@@ -17,6 +17,9 @@ int main()
         for (int j = 1; j <= n; j++)
             scanf("%d", &A[i][j]);
 
+    int a1, b1, a2, b2;
+    scanf("%d %d %d %d", &a1, &b1, &a2, &b2);
+
     for (int i = 1; i <= m; i++)
     {
         for (int j = 1; j <= n; j++)
@@ -34,9 +37,6 @@ int main()
             printf("%d ", P[i][j]);
         printf("\n");
     }
-
-    int a1, b1, a2, b2;
-    scanf("%d %d %d %d", &a1, &b1, &a2, &b2);
 
     int sum =
         P[a2][b2]
