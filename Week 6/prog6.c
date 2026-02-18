@@ -1,39 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
+#include <string.h>
 
-int maxi(int a, int b)
-{
-    return a>b?a:b;
-}
-int main()
-{
-    char str[100];
-    scanf("%s",str);
-    char stk[100];
+int main() {
+    char s[1000];
+    scanf("%s", s);
+    
+    int n = strlen(s);
+    int stack[1000];
     int top = -1;
-    int len = 0;
-    int maxlen = 0;
-    for(int i = 0; str[i] != '\0'; i++)
-    {
-        if(str[i] == '(')
-        {
-            stk[++top] = '(';
-        }
-        else
-        {
-            if(top == -1)
-            {
-                maxlen = maxi(maxlen,len);
-                top = -1;
-                len = 0;
-                continue;
+    
+    int maxLen = 0;
+    
+    // Push -1 initially
+    stack[++top] = -1;
+    
+    for(int i = 0; i < n; i++) {
+        if(s[i] == '(') {
+            stack[++top] = i;
+        } else {
+            top--;  // pop
+            
+            if(top == -1) {
+                stack[++top] = i;
+            } else {
+                int len = i - stack[top];
+                if(len > maxLen)
+                    maxLen = len;
             }
-            top--;
-            len = len+2;
         }
     }
-    maxlen = maxi(maxlen,len);
-    printf("%d\n",maxlen);
+    
+    printf("%d\n", maxLen);
     return 0;
 }
