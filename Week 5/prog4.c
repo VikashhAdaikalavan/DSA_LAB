@@ -25,7 +25,7 @@ int main()
     scanf("%d",&n);
     scanf("%d",&k);
     int arr[n];
-    for(int i =0 ; i< n ; i++) scanf("%d", & arr[i]);
+    for(int i =0 ; i< n ; i++) scanf("%d", &arr[i]);
 
     int l = 0;
     int r = arr[n-1] - arr[0]; 
