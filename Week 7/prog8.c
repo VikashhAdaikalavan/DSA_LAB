@@ -4,10 +4,13 @@
 int tobin(int n)
 {
     int bin = 0;
-    while(n>0)
+    int place = 1;
+
+    while(n > 0)
     {
-        bin = bin*10 +n%2;
-        n = n/2;
+        bin += (n % 2) * place;
+        place *= 10;
+        n /= 2;
     }
     return bin;
 }
@@ -21,6 +24,7 @@ int main()
     int n;
     scanf("%d",&n);
     int bin = tobin(n);
+    printf("%d\n",bin);
     while(front<=back)
     {
         int c = back-front+1;
