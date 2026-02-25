@@ -18,23 +18,22 @@ int main() {
         return 0;
     }
 
-    int q[2*n], front = 0, size = 0;
+    int q[2*n];
+    int front = 0, back = -1;
     int tank = 0;
 
     for (int i = 0; i < 2*n; i++) {
         int idx = i % n;
 
-        q[front + size] = idx;
-        size++;
+        q[++back] = idx;
         tank += gas[idx] - dist[idx];
 
-        while (tank < 0) {
+        while (tank < 0 && front <= back) {
             int rem = q[front++];
-            size--;
             tank -= (gas[rem] - dist[rem]);
         }
 
-        if (size == n) {
+        if (back - front + 1 == n) {
             printf("%d\n", q[front]);
             return 0;
         }

@@ -5,10 +5,10 @@ int main() {
     int n;
     scanf("%d", &n);
 
-    int queue[MAX];
-    int front = 0, rear = -1;
+    int q[MAX];
+    int front = 0, back = -1;
 
-    int stack[MAX];
+    int stk[MAX];
     int top = -1;
 
     int half = n / 2;
@@ -16,32 +16,37 @@ int main() {
     for (int i = 0; i < n; i++) {
         int x;
         scanf("%d", &x);
-        queue[++rear] = x;
+        q[++back] = x;
     }
 
-    for (int i = 0; i < half; i++) {
-        stack[++top] = queue[front++];  
+    for(int i = 0 ; i< half ; i++)
+    {
+        q[++back] = q[front++]; 
+    }
+    for(int i = half ; i<n ; i++)
+    {
+        stk[++top] = q[front++];
+    }
+    while(top != -1) q[++back] = stk[top--];
+
+    for(int i = 0 ; i< half ; i++)
+    {
+        q[++back] = q[front++]; 
+    }
+    for(int i = half ; i<n ; i++)
+    {
+        stk[++top] = q[front++];
     }
 
-    while (top != -1) {
-        queue[++rear] = stack[top--];
+    for(int i = 0; i< n ; i++)
+    {
+        if(i%2 == 0) q[++back] = q[front++];
+        else q[++back] = stk[top--];
     }
+    
 
-    for (int i = 0; i < half; i++) {
-        queue[++rear] = queue[front++];
-    }
-
-    for (int i = 0; i < half; i++) {
-        stack[++top] = queue[front++];
-    }
-
-    while (top != -1) {
-        queue[++rear] = stack[top--];
-        queue[++rear] = queue[front++];
-    }
-
-    while (front <= rear) {
-        printf("%d ", queue[front++]);
+    while (front <= back) {
+        printf("%d ", q[front++]);
     }
 
     return 0;
