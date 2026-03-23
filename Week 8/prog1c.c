@@ -2,7 +2,8 @@
 
 #define MAX 10000
 
-int heap[MAX], size = 0;
+int heap[MAX];
+int size = 0;
 
 // swap
 void swap(int i, int j) {
@@ -33,39 +34,29 @@ void insert(int val) {
     }
 }
 
-// extract min
-int extractMin() {
-    int x = heap[0];
-    heap[0] = heap[--size];
-    heapify(0);
-    return x;
-}
-
 int main() {
-    int n;
-    scanf("%d", &n);
+    int k, n;
+    scanf("%d %d", &k, &n);
 
-    int visited[100001] = {0};
-
-    insert(2); visited[2] = 1;
-    insert(5); visited[5] = 1;
-    insert(7); visited[7] = 1;
-
-    int ans = 0;
-
-    for (int i = 0; i < n; i++) {
-        int x = extractMin();
-        ans = x;
-
-        int next[3] = {x*2, x*5, x*7};
-
-        for (int j = 0; j < 3; j++) {
-            if (next[j] <= 100000 && !visited[next[j]]) {
-                insert(next[j]);
-                visited[next[j]] = 1;
-            }
-        }
+    if (k > n) {
+        printf("Invalid input\n");
+        return 0;
     }
 
-    printf("%d\n", ans);
+    for (int i = 0; i < n; i++) {
+        int x;
+        scanf("%d", &x);
+
+        if (size < k) {
+            insert(x);
+        } else if (x > heap[0]) {
+            heap[0] = x;
+            heapify(0);
+        }
+
+        if (size < k) printf("-1 ");
+        else printf("%d ", heap[0]);
+    }
+
+    printf("\n");
 }
