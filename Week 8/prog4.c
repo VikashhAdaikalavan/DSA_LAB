@@ -1,80 +1,70 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#define MAX 10000
-
-int A[1000], B[1000];
-
-// heap node
 typedef struct {
     int sum, i, j;
 } Node;
 
-Node heap[MAX];
-int size = 0;
+Node heap[100005];
+int heap_size = 0;
 
-// swap
-void swap(int i, int j) {
-    Node t = heap[i]; heap[i] = heap[j]; heap[j] = t;
+void swap(Node *a, Node *b) {
+    Node t = *a; *a = *b; *b = t;
 }
 
-// heapify
-void heapify(int i) {
-    int s = i, l = 2*i+1, r = 2*i+2;
-
-    if (l < size && heap[l].sum < heap[s].sum) s = l;
-    if (r < size && heap[r].sum < heap[s].sum) s = r;
-
-    if (s != i) {
-        swap(i, s);
-        heapify(s);
+void push(Node n) {
+    heap[++heap_size] = n;
+    int i = heap_size;
+    while (i > 1 && heap[i].sum < heap[i/2].sum) {
+        swap(&heap[i], &heap[i/2]);
+        i /= 2;
     }
 }
 
-// push
-void push(Node x) {
-    int i = size++;
-    heap[i] = x;
-
-    while (i && heap[(i-1)/2].sum > heap[i].sum) {
-        swap(i, (i-1)/2);
-        i = (i-1)/2;
-    }
-}
-
-// pop
 Node pop() {
-    Node x = heap[0];
-    heap[0] = heap[--size];
-    heapify(0);
-    return x;
+    Node top = heap[1];
+    heap[1] = heap[heap_size--];
+    int i = 1;
+    while (1) {
+        int smallest = i;
+        if (2*i <= heap_size && heap[2*i].sum < heap[smallest].sum) smallest = 2*i;
+        if (2*i+1 <= heap_size && heap[2*i+1].sum < heap[smallest].sum) smallest = 2*i+1;
+        if (smallest == i) break;
+        swap(&heap[i], &heap[smallest]);
+        i = smallest;
+    }
+    return top;
 }
 
 int main() {
     int n1, n2;
     scanf("%d %d", &n1, &n2);
 
-    for (int i = 0; i < n1; i++) scanf("%d", &A[i]);
-    for (int j = 0; j < n2; j++) scanf("%d", &B[j]);
+    int nums1[1005], nums2[1005];
+    for (int i = 0; i < n1; i++) scanf("%d", &nums1[i]);
+    for (int i = 0; i < n2; i++) scanf("%d", &nums2[i]);
 
     int k;
     scanf("%d", &k);
 
-    // initialize heap with (i,0)
-    for (int i = 0; i < n1; i++) {
-        push((Node){A[i] + B[0], i, 0});
+    // Push (nums1[i] + nums2[0], i, 0) for all i
+    for (int i = 0; i < n1 && i < k; i++) {
+        Node n = {nums1[i] + nums2[0], i, 0};
+        push(n);
     }
 
-    // get k pairs
-    while (k-- && size > 0) {
+    int count = 0;
+    while (heap_size > 0 && count < k) {
         Node cur = pop();
+        printf("%d %d\n", nums1[cur.i], nums2[cur.j]);
+        count++;
 
-        int i = cur.i, j = cur.j;
-
-        printf("%d %d\n", A[i], B[j]);
-
-        // push next element in same row
-        if (j + 1 < n2) {
-            push((Node){A[i] + B[j+1], i, j+1});
+        // Push next pair from same nums1[i] row
+        if (cur.j + 1 < n2) {
+            Node next = {nums1[cur.i] + nums2[cur.j + 1], cur.i, cur.j + 1};
+            push(next);
         }
     }
+
+    return 0;
 }

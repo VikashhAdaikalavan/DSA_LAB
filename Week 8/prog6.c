@@ -4,12 +4,10 @@
 
 int heap[MAX], size = 0;
 
-// swap
 void swap(int i, int j) {
     int t = heap[i]; heap[i] = heap[j]; heap[j] = t;
 }
 
-// heapify (min heap)
 void heapify(int i) {
     int smallest = i, l = 2*i+1, r = 2*i+2;
 
@@ -22,7 +20,6 @@ void heapify(int i) {
     }
 }
 
-// insert
 void insert(int val) {
     int i = size++;
     heap[i] = val;
@@ -33,7 +30,6 @@ void insert(int val) {
     }
 }
 
-// extract min
 int extractMin() {
     int x = heap[0];
     heap[0] = heap[--size];
@@ -52,20 +48,22 @@ int main() {
     insert(7); visited[7] = 1;
 
     int ans = 0;
+    int primes[3] = {2, 5, 7};
 
     for (int i = 0; i < n; i++) {
         int x = extractMin();
         ans = x;
 
-        int next[3] = {x*2, x*5, x*7};
-
         for (int j = 0; j < 3; j++) {
-            if (next[j] <= 100000 && !visited[next[j]]) {
-                insert(next[j]);
-                visited[next[j]] = 1;
+            long long next = (long long)x * primes[j]; // ← overflow safe
+            if (next <= 100000 && !visited[next]) {
+                insert((int)next);
+                visited[next] = 1;
             }
         }
     }
 
     printf("%d\n", ans);
+
+    return 0;
 }
