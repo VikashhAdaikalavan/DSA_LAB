@@ -13,22 +13,22 @@ void swap(Node *a, Node *b) {
 }
 
 void push(Node n) {
-    heap[++heap_size] = n;
     int i = heap_size;
-    while (i > 1 && heap[i].sum < heap[i/2].sum) {
-        swap(&heap[i], &heap[i/2]);
-        i /= 2;
+    heap[heap_size++] = n;
+    while (i && heap[i].sum < heap[(i-1)/2].sum) {
+        swap(&heap[i], &heap[(i-1)/2]);
+        i = (i-1)/2;
     }
 }
 
 Node pop() {
-    Node top = heap[1];
-    heap[1] = heap[heap_size--];
-    int i = 1;
+    Node top = heap[0];
+    heap[0] = heap[--heap_size];
+    int i = 0;
     while (1) {
         int smallest = i;
-        if (2*i <= heap_size && heap[2*i].sum < heap[smallest].sum) smallest = 2*i;
-        if (2*i+1 <= heap_size && heap[2*i+1].sum < heap[smallest].sum) smallest = 2*i+1;
+        if (2*i+1 < heap_size && heap[2*i+1].sum < heap[smallest].sum) smallest = 2*i+1;
+        if (2*i+2 < heap_size && heap[2*i+2].sum < heap[smallest].sum) smallest = 2*i+2;
         if (smallest == i) break;
         swap(&heap[i], &heap[smallest]);
         i = smallest;
