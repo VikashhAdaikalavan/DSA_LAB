@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <limits.h>
 
-#define MAX_K 100
-#define MAX_N 1000
+#define KMAX 100
+#define NMAX 100
 
 typedef struct {
     int val;
@@ -10,89 +10,97 @@ typedef struct {
     int idx;
 } Node;
 
-Node heap[MAX_K];
+Node heap[KMAX];
 int size = 0;
 
+int arr[KMAX][NMAX], sz[KMAX];
+
+// swap
 void swap(Node *a, Node *b) {
     Node t = *a; *a = *b; *b = t;
 }
 
+// heapify
 void heapify(int i) {
     int smallest = i;
-    if (2*i+1 < size && heap[2*i+1].val < heap[smallest].val)
-        smallest = 2*i+1;
-    if (2*i+2 < size && heap[2*i+2].val < heap[smallest].val)
-        smallest = 2*i+2;
+    int l = 2*i + 1, r = 2*i + 2;
+
+    if (l < size && heap[l].val < heap[smallest].val)
+        smallest = l;
+    if (r < size && heap[r].val < heap[smallest].val)
+        smallest = r;
+
     if (smallest != i) {
         swap(&heap[i], &heap[smallest]);
         heapify(smallest);
     }
 }
 
-Node extractMin() {
-    Node root = heap[0];
-    heap[0] = heap[--size];
-    heapify(0);
-    return root;
-}
+// push
+void push(Node n) {
+    int i = size;
+    heap[size++] = n;
 
-void insert(Node x) {
-    heap[size++] = x;
-    int i = size - 1;
-    while (i > 0 && heap[i].val < heap[(i-1)/2].val) {
+    while (i > 0 && heap[(i-1)/2].val > heap[i].val) {
         swap(&heap[i], &heap[(i-1)/2]);
         i = (i-1)/2;
     }
+}
+
+// pop
+Node pop() {
+    Node top = heap[0];
+    heap[0] = heap[--size];
+    heapify(0);
+    return top;
 }
 
 int main() {
     int k;
     scanf("%d", &k);
 
-    int arr[MAX_K][MAX_N], n[MAX_K];
-
     for (int i = 0; i < k; i++) {
-        scanf("%d", &n[i]);
-        for (int j = 0; j < n[i]; j++)
+        scanf("%d", &sz[i]);
+        for (int j = 0; j < sz[i]; j++) {
             scanf("%d", &arr[i][j]);
+        }
     }
 
-    int current_max = INT_MIN;
+    int max_val = INT_MIN;
 
-    // Initialize heap
+    // push first elements
     for (int i = 0; i < k; i++) {
-        Node x = {arr[i][0], i, 0};
-        insert(x);
-        if (arr[i][0] > current_max)
-            current_max = arr[i][0];
+        Node n = {arr[i][0], i, 0};
+        push(n);
+        if (arr[i][0] > max_val)
+            max_val = arr[i][0];
     }
 
-    int range_start = 0, range_end = INT_MAX;
+    int best_l = 0, best_r = INT_MAX;
 
     while (1) {
-        Node minNode = extractMin();
-        int current_min = minNode.val;
+        Node cur = pop();
+        int min_val = cur.val;
 
-        // Update range
-        if (current_max - current_min < range_end - range_start) {
-            range_start = current_min;
-            range_end = current_max;
+        // update range
+        if (max_val - min_val < best_r - best_l) {
+            best_l = min_val;
+            best_r = max_val;
         }
 
-        int row = minNode.row;
-        int idx = minNode.idx + 1;
+        // move forward in same list
+        if (cur.idx + 1 < sz[cur.row]) {
+            int next_val = arr[cur.row][cur.idx + 1];
+            Node next = {next_val, cur.row, cur.idx + 1};
+            push(next);
 
-        if (idx >= n[row]) break;
-
-        int nextVal = arr[row][idx];
-
-        insert((Node){nextVal, row, idx});
-
-        if (nextVal > current_max)
-            current_max = nextVal;
+            if (next_val > max_val)
+                max_val = next_val;
+        } else {
+            break; // one list finished
+        }
     }
 
-    printf("%d %d\n", range_start, range_end);
-
+    printf("%d %d\n", best_l, best_r);
     return 0;
 }

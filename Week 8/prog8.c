@@ -1,26 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX 10000
+#define MAX 110
 
 typedef struct {
-    int h, r, c;
-} Node;
+    int x, y, h;
+} Cell;
 
-Node heap[MAX];
+Cell heap[MAX * MAX];
 int size = 0;
 
-void swap(Node *a, Node *b) {
-    Node temp = *a;
-    *a = *b;
-    *b = temp;
+int visited[MAX][MAX];
+int grid[MAX][MAX];
+int R, C;
+
+// Directions
+int dx[4] = {-1, 1, 0, 0};
+int dy[4] = {0, 0, -1, 1};
+
+// Swap
+void swap(Cell *a, Cell *b) {
+    Cell t = *a; *a = *b; *b = t;
 }
 
-// Min-heapify
+// Heapify
 void heapify(int i) {
     int smallest = i;
-    int l = 2*i + 1;
-    int r = 2*i + 2;
+    int l = 2*i + 1, r = 2*i + 2;
 
     if (l < size && heap[l].h < heap[smallest].h)
         smallest = l;
@@ -33,11 +39,10 @@ void heapify(int i) {
     }
 }
 
-// Insert
-void push(Node val) {
-    heap[size] = val;
+// Push
+void push(Cell c) {
     int i = size;
-    size++;
+    heap[size++] = c;
 
     while (i > 0 && heap[(i-1)/2].h > heap[i].h) {
         swap(&heap[i], &heap[(i-1)/2]);
@@ -45,72 +50,58 @@ void push(Node val) {
     }
 }
 
-// Extract min
-Node pop() {
-    Node top = heap[0];
-    heap[0] = heap[size-1];
-    size--;
+// Pop
+Cell pop() {
+    Cell top = heap[0];
+    heap[0] = heap[--size];
     heapify(0);
     return top;
 }
 
-int trapRainWater(int **height, int R, int C) {
-    if (R <= 2 || C <= 2) return 0;
+int main() {
+    scanf("%d %d", &R, &C);
 
-    int visited[100][100] = {0};
+    for (int i = 0; i < R; i++)
+        for (int j = 0; j < C; j++)
+            scanf("%d", &grid[i][j]);
 
-    // Push all boundary cells
+    // Step 1: push all boundary cells
     for (int i = 0; i < R; i++) {
-        push((Node){height[i][0], i, 0});
-        push((Node){height[i][C-1], i, C-1});
-        visited[i][0] = visited[i][C-1] = 1;
-    }
-
-    for (int j = 1; j < C-1; j++) {
-        push((Node){height[0][j], 0, j});
-        push((Node){height[R-1][j], R-1, j});
-        visited[0][j] = visited[R-1][j] = 1;
-    }
-
-    int water = 0;
-    int dir[4][2] = {{1,0},{-1,0},{0,1},{0,-1}};
-
-    while (size > 0) {
-        Node curr = pop();
-
-        for (int d = 0; d < 4; d++) {
-            int nr = curr.r + dir[d][0];
-            int nc = curr.c + dir[d][1];
-
-            if (nr >= 0 && nr < R && nc >= 0 && nc < C && !visited[nr][nc]) {
-                visited[nr][nc] = 1;
-
-                int h = height[nr][nc];
-
-                if (curr.h > h)
-                    water += curr.h - h;
-
-                // push with updated boundary height
-                push((Node){ curr.h > h ? curr.h : h, nr, nc });
+        for (int j = 0; j < C; j++) {
+            if (i == 0 || j == 0 || i == R-1 || j == C-1) {
+                Cell c = {i, j, grid[i][j]};
+                push(c);
+                visited[i][j] = 1;
             }
         }
     }
 
-    return water;
-}
+    int water = 0;
 
-int main() {
-    int R, C;
-    scanf("%d %d", &R, &C);
+    while (size > 0) {
+        Cell cur = pop();
 
-    int **grid = (int **)malloc(R * sizeof(int *));
-    for (int i = 0; i < R; i++) {
-        grid[i] = (int *)malloc(C * sizeof(int));
-        for (int j = 0; j < C; j++) {
-            scanf("%d", &grid[i][j]);
+        for (int d = 0; d < 4; d++) {
+            int nx = cur.x + dx[d];
+            int ny = cur.y + dy[d];
+
+            if (nx >= 0 && ny >= 0 && nx < R && ny < C && !visited[nx][ny]) {
+
+                visited[nx][ny] = 1;
+
+                int nh = grid[nx][ny];
+
+                // Water trapped
+                if (cur.h > nh)
+                    water += cur.h - nh;
+
+                // Push updated height
+                Cell next = {nx, ny, (cur.h > nh ? cur.h : nh)};
+                push(next);
+            }
         }
     }
 
-    printf("%d\n", trapRainWater(grid, R, C));
+    printf("%d\n", water);
     return 0;
 }

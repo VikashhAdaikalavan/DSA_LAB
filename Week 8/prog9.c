@@ -54,12 +54,6 @@ void pop() {
     heapify(0);
 }
 
-// Compare by deadline
-int cmp(const void *a, const void *b) {
-    Job *j1 = (Job*)a;
-    Job *j2 = (Job*)b;
-    return j1->d - j2->d;
-}
 
 int main() {
     int N;
@@ -72,7 +66,18 @@ int main() {
     }
 
     // Sort by deadline
-    qsort(jobs, N, sizeof(Job), cmp);
+   for(int i = 0; i< N; i++)
+   {
+        for(int j = 0; j< N-1 ; j++)
+        {
+            if(jobs[j].d > jobs[j+1].d)
+            {
+                Job t = jobs[j];
+                jobs[j] = jobs[j+1];
+                jobs[j+1] = t;
+            }
+        }
+   }
 
     for (int i = 0; i < N; i++) {
         push(jobs[i].r);

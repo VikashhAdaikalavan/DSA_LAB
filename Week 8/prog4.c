@@ -41,16 +41,26 @@ int main() {
     scanf("%d %d", &n1, &n2);
 
     int nums1[1005], nums2[1005];
-    for (int i = 0; i < n1; i++) scanf("%d", &nums1[i]);
-    for (int i = 0; i < n2; i++) scanf("%d", &nums2[i]);
+
+    for (int i = 0; i < n1; i++) {
+        scanf("%d", &nums1[i]);
+    }
+
+    for (int i = 0; i < n2; i++) {
+        scanf("%d", &nums2[i]);
+    }
 
     int k;
     scanf("%d", &k);
 
-    // Push (nums1[i] + nums2[0], i, 0) for all i
-    for (int i = 0; i < n1 && i < k; i++) {
-        Node n = {nums1[i] + nums2[0], i, 0};
-        push(n);
+    for (int i = 0; i < n1; i++) {
+        for (int j = 0; j < n2; j++) {
+            Node n;
+            n.sum = nums1[i] + nums2[j];
+            n.i = i;
+            n.j = j;
+            push(n);
+        }
     }
 
     int count = 0;
@@ -58,12 +68,6 @@ int main() {
         Node cur = pop();
         printf("%d %d\n", nums1[cur.i], nums2[cur.j]);
         count++;
-
-        // Push next pair from same nums1[i] row
-        if (cur.j + 1 < n2) {
-            Node next = {nums1[cur.i] + nums2[cur.j + 1], cur.i, cur.j + 1};
-            push(next);
-        }
     }
 
     return 0;
