@@ -29,7 +29,7 @@ void insert(TreeNode* root, int v)
         if(root->right == NULL)
         {
             TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
-            node->left = NULL;
+            node->left = NULL;  
             node->right = NULL;
             node->val = v;
             root->right = node;
