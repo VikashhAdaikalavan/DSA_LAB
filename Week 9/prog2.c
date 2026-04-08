@@ -68,15 +68,13 @@ int main()
     inorder(root,arr,&i);
     int k;
     scanf("%d",&k);
+    int ans = -1;
     for(int i = 0; i < n ; i++)
     {
-        if(arr[i]>k)
-        {
-            if(i >0) printf("%d\n",arr[i-1]);
-            else printf("-1\n");
-            break;
-        }
+        if(arr[i]<= k) ans = arr[i];
+        else break;
     }
+    printf("%d\n",ans);
     
     return 0;
 

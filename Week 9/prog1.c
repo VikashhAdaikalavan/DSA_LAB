@@ -57,6 +57,20 @@ TreeNode* lca(TreeNode* node, int v , int u)
     if(l == NULL && r != NULL) return r;
     else if (l != NULL && r == NULL) return l;
     else if(l != NULL && r != NULL) return node;
+    return NULL;
+}
+
+TreeNode* lcaBST(TreeNode* root, int u, int v)
+{
+    if(root == NULL) return NULL;
+
+    if(root->val > u && root->val > v)
+        return lcaBST(root->left, u, v);
+
+    if(root->val < u && root->val < v)
+        return lcaBST(root->right, u, v);
+
+    return root; 
 }
 
 int main()

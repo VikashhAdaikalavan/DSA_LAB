@@ -47,7 +47,20 @@ void inorder(TreeNode* root, int* arr, int *i)
     inorder(root->right,arr,i);
     return;
 }
+    
+int countInRange(TreeNode* root, int u, int v)
+{
+    if(root == NULL) return 0;
 
+    if(root->val < u)
+        return countInRange(root->right, u, v);
+
+    if(root->val > v)
+        return countInRange(root->left, u, v);
+
+    return 1 + countInRange(root->left, u, v)
+             + countInRange(root->right, u, v);
+}
 
 int main()
 {

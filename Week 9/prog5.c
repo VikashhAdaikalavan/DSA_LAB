@@ -22,7 +22,7 @@ TreeNode* insert(TreeNode* root, int v)
             root->left = node;
             return node;
         }
-        else insert(root->left,v);
+        else return insert(root->left,v);
     }
     else
     {
@@ -35,7 +35,7 @@ TreeNode* insert(TreeNode* root, int v)
             root->right = node;
             return node;
         }
-        else insert(root->right,v);
+        else return insert(root->right,v);
     }
 }
 
