@@ -30,8 +30,6 @@ int main()
             dp[i][j] = -1;
         }
     }
-    
-
-    printf("%d\n",func(m-1,n-1,m,n,mat,dp));
+    printf("%d\n",func(m-1,n-1,m,n,mat,dp)%(int)(1e9+7));
     return 0;
 }
