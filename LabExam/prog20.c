@@ -23,8 +23,8 @@ int main() {
     // prefix sum
     int prefix[n + 1];
     prefix[0] = 0;
-    for (int i = 0; i < n; i++) {
-        prefix[i + 1] = prefix[i] + arr[i];
+    for (int i = 1; i <= n; i++) {
+        prefix[i] = prefix[i-1] + arr[i-1];
     }
 
     // dp table
@@ -42,7 +42,7 @@ int main() {
             dp[i][j] = INT_MAX;
 
             // try all splits 
-            for (int m = i; m < j; m++) {
+            for (int m = i; m < j; m += (k - 1)) {
                 int cost = dp[i][m] + dp[m + 1][j];
                 if (cost < dp[i][j]) {
                     dp[i][j] = cost;

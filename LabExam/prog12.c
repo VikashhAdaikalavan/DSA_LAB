@@ -7,35 +7,29 @@ int max(int a, int b) {
 }
 
 int solve(char *s, int start, int end, int k) {
-    if (end - start < k) return 0;
+    if (end - start +1 < k) return 0;
 
     int freq[26] = {0};
     
     // Count frequency
-    for (int i = start; i < end; i++) {
+    for (int i = start; i <= end; i++) {
         freq[s[i] - 'a']++;
     }
 
     // Check for invalid characters
-    for (int mid = start; mid < end; mid++) {
+    for (int mid = start; mid <= end; mid++) {
         if (freq[s[mid] - 'a'] < k) {
-            int midNext = mid + 1;
-            
-            // Skip consecutive invalid chars
-            while (midNext < end && freq[s[midNext] - 'a'] < k) {
-                midNext++;
-            }
 
             // Divide into two parts
             return max(
-                solve(s, start, mid, k),
-                solve(s, midNext, end, k)
+                solve(s, start, mid-1, k),
+                solve(s, mid+1, end, k)
             );
         }
     }
 
     // Entire substring is valid
-    return end - start;
+    return end - start +1;
 }
 
 int main() {
@@ -45,6 +39,6 @@ int main() {
     char s[100005];
     scanf("%s", s);
 
-    printf("%d\n", solve(s, 0, n, k));
+    printf("%d\n", solve(s, 0, n-1, k));
     return 0;
 }

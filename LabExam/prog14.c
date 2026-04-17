@@ -15,20 +15,12 @@ int dist(Point a, Point b) {
     return abs(a.x - b.x) + abs(a.y - b.y);
 }
 
-int cmpX(const void *a, const void *b) {
-    return ((Point*)a)->x - ((Point*)b)->x;
-}
-
-int cmpY(const void *a, const void *b) {
-    return ((Point*)a)->y - ((Point*)b)->y;
-}
-
 // brute force
 int brute(Point arr[], int l, int r) {
     int d = INT_MAX;
     for (int i = l; i <= r; i++) {
-        for (int j = i + 1; j <= r; j++) {
-            if (arr[i].set != arr[j].set) {
+        for (int j = l; j <= r; j++) {
+            if (arr[i].set != arr[j].set && i != j) {
                 d = min(d, dist(arr[i], arr[j]));
             }
         }
@@ -58,13 +50,10 @@ int closest(Point arr[], int l, int r) {
         }
     }
 
-    // sort by y
-    qsort(strip, k, sizeof(Point), cmpY);
-
     // check neighbors
     for (int i = 0; i < k; i++) {
-        for (int j = i + 1; j < k && (strip[j].y - strip[i].y) < d; j++) {
-            if (strip[i].set != strip[j].set) {
+        for (int j = 0; j < k ; j++) {
+            if (strip[i].set != strip[j].set && i != j) {
                 d = min(d, dist(strip[i], strip[j]));
             }
         }
@@ -89,7 +78,18 @@ int main() {
         arr[N + i].set = 1;
     }
 
-    qsort(arr, N + M, sizeof(Point), cmpX);
+    for(int j = 0; j< N+M ; j++)
+    {
+        for(int i = 0; i<N+M-1 ; i++)
+        {
+            if(arr[i].x<arr[i+1].x)
+            {
+                Point temp = arr[i];
+                arr[i] = arr[i+1];
+                arr[i+1] = temp;
+            }
+        }
+    }
 
     int ans = closest(arr, 0, N + M - 1);
 
