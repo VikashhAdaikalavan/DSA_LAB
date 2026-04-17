@@ -1,73 +1,61 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <limits.h>
 
-int mini(int a , int b)
-{
-    return a<b? a:b;
+int min(int a, int b) {
+    return a < b ? a : b;
 }
 
-int prefix[105];
-int sum(int i, int j)
-{
-    return prefix[j+1] - prefix[i];
-}
-
-int func(int i , int j, int K, int n , int arr[], int dp[n+2][n+2])
-{
-    if(i>=j) return 0;
-    if(dp[i][j] != -1) return dp[i][j];
-
-    int ans = INT_MAX;
-    for(int k = i; k < j; k += (K - 1))
-    {
-        int left = func(i, k, K, n, arr, dp);
-        int right = func(k+1, j, K, n, arr, dp);
-
-        if(left != INT_MAX && right != INT_MAX)
-            ans = mini(ans, left + right);
-    }
-
-    // conditional cost
-    if((j - i) % (K - 1) == 0 && ans != INT_MAX)
-    {
-        ans += sum(i, j);
-    }
-
-    return dp[i][j] = ans;
-}
-
-int main()
-{
-    int n,K;
-    scanf("%d %d",&n,&K);
+int main() {
+    int n, k;
+    scanf("%d %d", &n, &k);
 
     int arr[n];
-    for(int i = 0; i< n ; i++) scanf("%d",&arr[i]);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
 
-    // feasibility check
-    if((n-1) % (K-1) != 0)
-    {
+    // check if possible
+    if ((n - 1) % (k - 1) != 0) {
         printf("-1\n");
         return 0;
     }
 
     // prefix sum
+    int prefix[n + 1];
     prefix[0] = 0;
-    for(int i = 0; i < n; i++)
-    {
-        prefix[i+1] = prefix[i] + arr[i];
+    for (int i = 0; i < n; i++) {
+        prefix[i + 1] = prefix[i] + arr[i];
     }
 
-    int dp[n+2][n+2];
-    for(int i =0 ; i< n+2; i++)
-    {
-        for(int j = 0; j< n+2; j++)
-        {
-            dp[i][j] = -1;
-        } 
+    // dp table
+    int dp[n][n];
+
+    // initialize
+    for (int i = 0; i < n; i++) {
+        dp[i][i] = 0;
     }
-    
-    printf("%d\n",func(0,n-1,K,n,arr,dp));
+
+    // build dp
+    for (int len = 2; len <= n; len++) {
+        for (int i = 0; i + len <= n; i++) {
+            int j = i + len - 1;
+            dp[i][j] = INT_MAX;
+
+            // try all splits 
+            for (int m = i; m < j; m++) {
+                int cost = dp[i][m] + dp[m + 1][j];
+                if (cost < dp[i][j]) {
+                    dp[i][j] = cost;
+                }
+            }
+
+            // add merge cost only if can form 1 pile
+            if ((j - i) % (k - 1) == 0) {
+                dp[i][j] += prefix[j + 1] - prefix[i];
+            }
+        }
+    }
+
+    printf("%d\n", dp[0][n - 1]);
     return 0;
 }
