@@ -29,7 +29,7 @@ int func(int i , int j, int K, int n , int arr[], int dp[n+2][n+2])
     }
 
     // conditional cost
-    if((j - i) % (K - 1) == 0)
+    if((j - i) % (K - 1) == 0 && ans != INT_MAX)
     {
         ans += sum(i, j);
     }

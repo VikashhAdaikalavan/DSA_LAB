@@ -24,8 +24,7 @@ int func(int i, int j, int n, char s[n+1], int dp[n+1][n+1])
     {
         int n1 = func(i+1, j, n, s,dp);
         int n2 = func(i,j-1,n,s,dp);
-        int n3 = func(i+1, j-1,n,s,dp);
-        dp[i][j] =  maxi(n3,maxi(n1,n2));
+        dp[i][j] =  maxi(n1,n2);
         return dp[i][j];
     }
 }

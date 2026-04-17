@@ -1,4 +1,3 @@
-//note
 #include <stdio.h>
 #include <stdlib.h>
 

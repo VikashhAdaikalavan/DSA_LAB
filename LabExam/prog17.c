@@ -1,62 +1,51 @@
 #include <stdio.h>
-#include <limits.h>
+#include <stdlib.h>
 
-int max(int a, int b) {
-    return a > b ? a : b;
-}
-
-int max3(int a, int b, int c) {
-    return max(max(a, b), c);
-}
-
-int maxCrossingSum(int arr[], int l, int mid, int r)
+typedef struct
 {
-    int sum = 0;
-    int left_sum = INT_MIN;
+    int sum, prefix, suffix,best;
+}Node;
 
-    // left suffix
-    for (int i = mid; i >= l; i--) {
-        sum += arr[i];
-        if (sum > left_sum)
-            left_sum = sum;
-    }
-
-    sum = 0;
-    int right_sum = INT_MIN;
-
-    // right prefix
-    for (int i = mid + 1; i <= r; i++) {
-        sum += arr[i];
-        if (sum > right_sum)
-            right_sum = sum;
-    }
-
-    return left_sum + right_sum;
+int maxi(int a, int b)
+{
+    return a>b?a:b;
 }
 
-int maxSubarray(int arr[], int l, int r)
+Node make(int x)
 {
-    if (l == r)
-        return arr[l]; // base case
+    Node new;
+    new.best = new.sum = new.prefix = new.suffix = x;
+    return new;
+}
 
-    int mid = (l + r) / 2;
+Node merge(Node l, Node r)
+{
+    Node res;
+    res.sum = l.sum + r.sum;
+    res.prefix = maxi(l.prefix, l.sum+r.prefix);
+    res.suffix = maxi(r.suffix,r.sum + l.suffix);
+    res.best = maxi(maxi(l.best,r.best),l.suffix+r.prefix);
+    return res;
+}
 
-    int left = maxSubarray(arr, l, mid);
-    int right = maxSubarray(arr, mid + 1, r);
-    int cross = maxCrossingSum(arr, l, mid, r);
+Node func(int n, int arr[n],int l, int r)
+{
+    if(l == r) return make(arr[l]);
 
-    return max3(left, right, cross);
+    int mid = (l+r)/2;
+    Node left = func(n,arr,l,mid);
+    Node right = func(n,arr,mid+1,r);
+    Node ans = merge(left,right);
+    return ans;
 }
 
 int main()
 {
     int n;
-    scanf("%d", &n);
-
+    scanf("%d",&n);
     int arr[n];
-    for (int i = 0; i < n; i++)
-        scanf("%d", &arr[i]);
-
-    printf("%d\n", maxSubarray(arr, 0, n - 1));
+    for(int i =0 ; i<n ; i++) scanf("%d",&arr[i]);
+    printf("%d\n",(func(n,arr,0,n-1)).best);
     return 0;
 }
+

@@ -11,7 +11,7 @@ int func(int i, int hn , int n ,int h,int maxhrs, int payment[n], int hours[n], 
 {
     if(i>=n) return 0;
     if(dp[i][hn] != -1) return dp[i][hn];
-    int take = INT_MIN;
+    int take = 0;
     if(hn+hours[i]<=h)  take = payment[i] + func(i+1,hn+hours[i],n,h,maxhrs,payment,hours,dp);
     int nottake = 0 + func(i+1,hn,n,h,maxhrs,payment,hours,dp);
     dp[i][hn] = maxi(take, nottake);

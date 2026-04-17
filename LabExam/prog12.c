@@ -6,34 +6,36 @@ int max(int a, int b) {
     return a > b ? a : b;
 }
 
-int solve(char *s, int l, int r, int k) {
-    if (r - l + 1 < k) return 0;
+int solve(char *s, int start, int end, int k) {
+    if (end - start < k) return 0;
 
     int freq[26] = {0};
-
+    
     // Count frequency
-    for (int i = l; i <= r; i++) {
+    for (int i = start; i < end; i++) {
         freq[s[i] - 'a']++;
     }
 
     // Check for invalid characters
-    for (int i = l; i <= r; i++) {
-        if (freq[s[i] - 'a'] < k) {
-            int j = i;
+    for (int mid = start; mid < end; mid++) {
+        if (freq[s[mid] - 'a'] < k) {
+            int midNext = mid + 1;
             
-            // skip all consecutive invalid chars
-            while (j <= r && freq[s[j] - 'a'] < k) j++;
-            
-            // divide into two parts
-            int left = solve(s, l, i - 1, k);
-            int right = solve(s, j, r, k);
-            
-            return max(left, right);
+            // Skip consecutive invalid chars
+            while (midNext < end && freq[s[midNext] - 'a'] < k) {
+                midNext++;
+            }
+
+            // Divide into two parts
+            return max(
+                solve(s, start, mid, k),
+                solve(s, midNext, end, k)
+            );
         }
     }
 
-    // all characters valid
-    return r - l + 1;
+    // Entire substring is valid
+    return end - start;
 }
 
 int main() {
@@ -43,8 +45,6 @@ int main() {
     char s[100005];
     scanf("%s", s);
 
-    int ans = solve(s, 0, n - 1, k);
-    printf("%d\n", ans);
-
+    printf("%d\n", solve(s, 0, n, k));
     return 0;
 }

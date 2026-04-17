@@ -22,7 +22,7 @@ int func(int i, int j, int n, int m , char s[n+1] , char p[m+1])
     {
         if(p[j] == '*')
         {
-            return func(i+1,j+1,n,m,s,p) || func(i+1,j,n,m,s,p) || func(i,j+1,n,m,s,p);
+            return func(i+1,j,n,m,s,p) || func(i,j+1,n,m,s,p);
         }
         else if(p[j] == '?')
         {

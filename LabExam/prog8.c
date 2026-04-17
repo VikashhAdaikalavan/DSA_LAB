@@ -29,7 +29,7 @@ int lis(int i, int prev, int k, int arr[], int dp[100][101])
 // LDS starting at k (k - n-1)
 int lds(int i, int prev, int n, int arr[], int dp[100][101])
 {
-    if(i == n) return 0;
+    if(i >= n) return 0;
 
     if(dp[i][prev+1] != -1) return dp[i][prev+1];
 

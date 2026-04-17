@@ -28,6 +28,13 @@ int main()
         dp2[i] = -1;
         scanf("%d",&arr[i]);
     }
+
+    if (n == 1)
+    {
+        printf("%d\n", arr[0]);
+        return 0;
+    }
+
     int arr1[n-1], arr2[n-1];
     for(int i =0; i< n-1 ; i++) arr1[i] = arr[i];
     for(int i = 1; i< n ; i++) arr2[i-1] = arr[i];
