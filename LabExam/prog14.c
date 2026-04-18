@@ -82,7 +82,7 @@ int main() {
     {
         for(int i = 0; i<N+M-1 ; i++)
         {
-            if(arr[i].x<arr[i+1].x)
+            if(arr[i].x>arr[i+1].x)
             {
                 Point temp = arr[i];
                 arr[i] = arr[i+1];

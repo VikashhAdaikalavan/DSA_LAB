@@ -14,6 +14,11 @@ int main() {
         scanf("%d", &arr[i]);
     }
 
+    if (k == 1) {
+    printf("-1\n");
+    return 0;
+    }
+
     // check if possible
     if ((n - 1) % (k - 1) != 0) {
         printf("-1\n");
